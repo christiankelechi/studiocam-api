@@ -1,2 +1,18 @@
-venv
-.venv
+# Python
+.venv/
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Vercel
+.vercel/
+
+# Runtime data & uploads
+data/
+*.log
+
+# Environments
+.env
+.env.local

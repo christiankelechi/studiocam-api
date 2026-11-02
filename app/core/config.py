@@ -2,18 +2,29 @@
 
 import os
 from pathlib import Path
+import tempfile
 from typing import List
 from pydantic import BaseModel, Field
 
 # Base directories
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
-DATA_DIR = BASE_DIR / "data"
-UPLOADS_DIR = DATA_DIR / "uploads"
-OUTPUTS_DIR = DATA_DIR / "outputs"
 
-# Ensure directories exist
-for directory in (DATA_DIR, UPLOADS_DIR, OUTPUTS_DIR):
-    directory.mkdir(parents=True, exist_ok=True)
+# Safe writable storage directory for Vercel / AWS Lambda (never crash on read-only filesystem)
+try:
+    if os.getenv("VERCEL") or os.getenv("VERCEL_ENV") or os.getenv("VERCEL_REGION") or os.getenv("AWS_LAMBDA_FUNCTION_NAME"):
+        DATA_DIR = Path(tempfile.gettempdir()) / "studiocam" / "data"
+    else:
+        DATA_DIR = BASE_DIR / "data"
+
+    UPLOADS_DIR = DATA_DIR / "uploads"
+    OUTPUTS_DIR = DATA_DIR / "outputs"
+
+    for directory in (DATA_DIR, UPLOADS_DIR, OUTPUTS_DIR):
+        directory.mkdir(parents=True, exist_ok=True)
+except Exception:
+    DATA_DIR = Path(tempfile.gettempdir())
+    UPLOADS_DIR = DATA_DIR
+    OUTPUTS_DIR = DATA_DIR
 
 
 class Settings(BaseModel):
