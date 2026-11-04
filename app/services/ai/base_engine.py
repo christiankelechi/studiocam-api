@@ -25,7 +25,7 @@ class BaseAIEngine(ABC):
     @property
     @abstractmethod
     def engine_name(self) -> str:
-        """Name of the AI engine (e.g., BRIA RMBG-1.4, Flux.1)."""
+        """Name of the AI engine (e.g., StudioCam Smart Cutout™, StudioCam UltraScene™)."""
         pass
 
     @property
@@ -51,6 +51,10 @@ class BaseAIEngine(ABC):
         result["remaining_credits"] = remaining_credits
         result["credits_used"] = self.credit_cost
         result["engine"] = self.engine_name
+        if "message" not in result:
+            result["message"] = f"{self.engine_name} operation completed successfully."
+        if "success" not in result:
+            result["success"] = True
 
         return result
 

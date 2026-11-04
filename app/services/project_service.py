@@ -26,10 +26,12 @@ class ProjectService:
 
     def create_project(self, user_id: str, payload: ProjectCreate) -> Project:
         project_id = f"proj_{uuid.uuid4().hex[:10]}"
+        title = payload.title or payload.name or "Untitled Studio Project"
         new_project = Project(
             id=project_id,
             user_id=user_id,
-            title=payload.title,
+            title=title,
+            name=title,
             aspect_ratio=payload.aspect_ratio,
             width=payload.width,
             height=payload.height,

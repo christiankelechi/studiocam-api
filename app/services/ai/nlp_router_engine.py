@@ -22,12 +22,13 @@ class NLPCommandRouterEngine(BaseAIEngine):
         return 0  # Voice parsing is free for all users
 
     def validate_input(self, request_data: NLPCommandRequest) -> None:
-        if not request_data.transcript or not request_data.transcript.strip():
+        text = request_data.get_text()
+        if not text or not text.strip():
             raise ValueError("Transcript cannot be empty.")
 
     def execute_pipeline(self, request_data: NLPCommandRequest, user: UserInDB) -> Dict[str, Any]:
         """Classify user intent and extract parameterized UI directives."""
-        transcript = request_data.transcript.lower().strip()
+        transcript = request_data.get_text().lower().strip()
 
         # 1. Background Removal Intent
         if any(w in transcript for w in ("remove background", "cut out", "isolate", "transparent", "rmbg", "remove bg")):
@@ -36,7 +37,7 @@ class NLPCommandRouterEngine(BaseAIEngine):
                 confidence=0.98,
                 target_tool="bg_remover",
                 parameters={"feather_radius": 2.0},
-                friendly_response="Isolating the subject with BRIA RMBG-1.4 alpha matting.",
+                friendly_response="Isolating the subject with StudioCam Smart Cutout™ alpha matting.",
                 executed_action=True,
             ).model_dump()
 
@@ -60,7 +61,7 @@ class NLPCommandRouterEngine(BaseAIEngine):
                 target_tool="scene_swap",
                 parameters={
                     "preset_id": preset_id,
-                    "prompt": request_data.transcript,
+                    "prompt": request_data.get_text(),
                     "shadow_softness": 0.6,
                 },
                 friendly_response=f"Generating photorealistic scene using the {preset_id.replace('_', ' ').title()} environment.",
@@ -152,12 +153,13 @@ class NLPCommandRouterEngine(BaseAIEngine):
             ).model_dump()
 
         # Default Fallback: General Prompt Search / AI generation
+        text_content = request_data.get_text()
         return NLPCommandResponse(
-            recognized_intent="custom_generation",
-            confidence=0.80,
+            recognized_intent="scene_swap",
+            confidence=0.85,
             target_tool="scene_swap",
-            parameters={"prompt": request_data.transcript},
-            friendly_response=f"Interpreting creative directive: '{request_data.transcript}'",
+            parameters={"prompt": text_content, "preset_id": "executive_penthouse"},
+            friendly_response=f"Interpreting creative directive: '{text_content}'",
             executed_action=True,
         ).model_dump()
 

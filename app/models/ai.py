@@ -26,77 +26,94 @@ class GenerationJob(BaseModel):
     error_message: Optional[str] = None
     created_at: datetime = Field(default_factory=datetime.utcnow)
     completed_at: Optional[datetime] = None
+    success: bool = True
+    message: Optional[str] = "Job status retrieved successfully."
 
 
 class BgRemovalRequest(BaseModel):
-    """Payload for BRIA RMBG-1.4 subject cutout."""
-    image_url: Optional[str] = None
-    image_base64: Optional[str] = None
-    feather_radius: float = 2.0
-    return_mask: bool = False
+    """Payload for StudioCam Smart Cutout™ subject cutout."""
+    model_config = {"populate_by_name": True, "extra": "ignore"}
+    image_url: Optional[str] = Field(default=None, alias="imageUrl")
+    image_base64: Optional[str] = Field(default=None, alias="imageBase64")
+    feather_radius: float = Field(default=2.0, alias="featherRadius")
+    return_mask: bool = Field(default=False, alias="returnMask")
 
 
 class SceneSwapRequest(BaseModel):
-    """Payload for Flux.1 photorealistic scene & office generation."""
-    image_url: Optional[str] = None
-    image_base64: Optional[str] = None
-    prompt: str = "Modern executive CEO office with floor-to-ceiling glass windows overlooking skyline, warm ambient desk lighting, cinematic 8k"
-    preset_category: Optional[str] = "office"  # office, studio, outdoor, architectural, abstract
-    preset_id: Optional[str] = "executive_penthouse"  # executive_penthouse, modern_open_workspace, minimalist_scandinavian, etc.
-    shadow_softness: float = 0.5
-    light_direction: float = 45.0  # degrees 0-360
-    color_harmonization: float = 0.7
+    """Payload for StudioCam UltraScene™ photorealistic scene & office generation."""
+    model_config = {"populate_by_name": True, "extra": "ignore"}
+    image_url: Optional[str] = Field(default=None, alias="imageUrl")
+    image_base64: Optional[str] = Field(default=None, alias="imageBase64")
+    prompt: Optional[str] = "Modern executive CEO office with floor-to-ceiling glass windows overlooking skyline, warm ambient desk lighting, cinematic 8k"
+    preset_category: Optional[str] = Field(default="office", alias="presetCategory")
+    preset_id: Optional[str] = Field(default="executive_penthouse", alias="presetId")
+    shadow_softness: float = Field(default=0.5, alias="shadowSoftness")
+    light_direction: float = Field(default=45.0, alias="lightDirection")
+    color_harmonization: float = Field(default=0.7, alias="colorHarmonization")
 
 
 class RelightRequest(BaseModel):
-    """Payload for IC-Light studio directional relighting."""
-    image_url: Optional[str] = None
-    image_base64: Optional[str] = None
-    light_angle: float = 45.0  # degrees 0 - 360
-    light_intensity: float = 1.0  # 0.0 - 2.0
-    color_temperature: int = 4500  # 2500K (warm) to 7500K (cool)
-    ambient_exposure: float = 0.0  # -1.0 to 1.0
-    light_color_hex: Optional[str] = "#FFFFFF"
+    """Payload for StudioCam CinemaLight™ studio directional relighting."""
+    model_config = {"populate_by_name": True, "extra": "ignore"}
+    image_url: Optional[str] = Field(default=None, alias="imageUrl")
+    image_base64: Optional[str] = Field(default=None, alias="imageBase64")
+    light_angle: float = Field(default=45.0, alias="lightAngle")
+    light_intensity: float = Field(default=1.0, alias="lightIntensity")
+    color_temperature: int = Field(default=4500, alias="colorTemperature")
+    ambient_exposure: float = Field(default=0.0, alias="ambientExposure")
+    light_color_hex: Optional[str] = Field(default="#FFFFFF", alias="lightColorHex")
 
 
 class VideoAnimateRequest(BaseModel):
-    """Payload for Wan 2.1 / LTX-2 cinematic image-to-video motion synthesis."""
-    image_url: Optional[str] = None
-    image_base64: Optional[str] = None
-    motion_type: str = "cinematic_push_in"  # push_in, pan_right, orbit, tilt_up, slow_zoom
-    duration_seconds: int = 5
+    """Payload for StudioCam CinemaMotion™ / StudioCam CinemaMotion™ cinematic image-to-video motion synthesis."""
+    model_config = {"populate_by_name": True, "extra": "ignore"}
+    image_url: Optional[str] = Field(default=None, alias="imageUrl")
+    image_base64: Optional[str] = Field(default=None, alias="imageBase64")
+    motion_type: str = Field(default="cinematic_push_in", alias="motionType")
+    duration_seconds: int = Field(default=5, alias="durationSeconds")
     fps: int = 24
-    camera_intensity: float = 0.8
-    motion_prompt: Optional[str] = "Subtle cinematic motion, slow depth-of-field rack focus"
+    camera_intensity: float = Field(default=0.8, alias="cameraIntensity")
+    motion_prompt: Optional[str] = Field(default="Subtle cinematic motion, slow depth-of-field rack focus", alias="motionPrompt")
 
 
 class MagicEraseRequest(BaseModel):
     """Payload for AI brush cleanup & object inpainting."""
-    image_url: Optional[str] = None
-    image_base64: Optional[str] = None
-    mask_base64: Optional[str] = None
+    model_config = {"populate_by_name": True, "extra": "ignore"}
+    image_url: Optional[str] = Field(default=None, alias="imageUrl")
+    image_base64: Optional[str] = Field(default=None, alias="imageBase64")
+    mask_base64: Optional[str] = Field(default=None, alias="maskBase64")
+    mask_data_url: Optional[str] = Field(default=None, alias="maskDataUrl")
     prompt: Optional[str] = "clean seamless background texture, remove unwanted object"
 
 
 class UpscaleRequest(BaseModel):
     """Payload for AI 4K/8K Super Resolution."""
-    image_url: Optional[str] = None
-    image_base64: Optional[str] = None
-    scale_factor: int = 4  # 2x, 4x, 8x
-    denoise_strength: float = 0.3
+    model_config = {"populate_by_name": True, "extra": "ignore"}
+    image_url: Optional[str] = Field(default=None, alias="imageUrl")
+    image_base64: Optional[str] = Field(default=None, alias="imageBase64")
+    scale_factor: int = Field(default=4, alias="scaleFactor")
+    factor: Optional[int] = None
+    denoise_strength: float = Field(default=0.3, alias="denoiseStrength")
+    face_restore: bool = Field(default=True, alias="faceRestore")
 
 
 class FaceRestoreRequest(BaseModel):
-    """Payload for GFPGAN / CodeFormer facial clarity restoration."""
-    image_url: Optional[str] = None
-    image_base64: Optional[str] = None
-    fidelity_ratio: float = 0.8
+    """Payload for StudioCam Face Clarity Engine™ / StudioCam Face Clarity Engine™ facial clarity restoration."""
+    model_config = {"populate_by_name": True, "extra": "ignore"}
+    image_url: Optional[str] = Field(default=None, alias="imageUrl")
+    image_base64: Optional[str] = Field(default=None, alias="imageBase64")
+    fidelity_ratio: float = Field(default=0.8, alias="fidelityRatio")
 
 
 class NLPCommandRequest(BaseModel):
     """Natural Language Voice/Text input transcript to be routed into UI action directives."""
-    transcript: str
-    current_context: Optional[Dict[str, Any]] = None
+    model_config = {"populate_by_name": True, "extra": "ignore"}
+    transcript: Optional[str] = None
+    command_text: Optional[str] = Field(default=None, alias="commandText")
+    current_context: Optional[Dict[str, Any]] = Field(default=None, alias="currentContext")
+
+    def get_text(self) -> str:
+        return self.transcript or self.command_text or ""
 
 
 class NLPCommandResponse(BaseModel):
@@ -107,4 +124,6 @@ class NLPCommandResponse(BaseModel):
     parameters: Dict[str, Any] = Field(default_factory=dict)
     friendly_response: str
     executed_action: bool = True
+    success: bool = True
+    message: str = "Command successfully parsed and routed."
 

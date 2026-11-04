@@ -16,3 +16,4 @@ data/
 # Environments
 .env
 .env.local
+audio_masterclass

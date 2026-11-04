@@ -46,7 +46,12 @@ def get_current_user_profile(user: UserInDB = Depends(get_current_user)):
 def refresh_token(user: UserInDB = Depends(get_current_user)):
     """Refresh session token."""
     new_token = create_access_token(subject=user.id, user_data=User(**user.model_dump()).model_dump(mode="json"))
-    return {"access_token": new_token, "token_type": "bearer"}
+    return {
+        "success": True,
+        "message": "Token refreshed successfully.",
+        "access_token": new_token,
+        "token_type": "bearer",
+    }
 
 
 @router.post("/forgot-password")

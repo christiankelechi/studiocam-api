@@ -1,4 +1,4 @@
-"""Wan 2.1 & LTX-2 Cinematic Video Motion Synthesis Service."""
+"""StudioCam CinemaMotion™ & StudioCam CinemaMotion™ Cinematic Video Motion Synthesis Service."""
 
 import os
 import uuid
@@ -14,13 +14,13 @@ from app.services.ai.base_engine import BaseAIEngine
 
 class WanAnimatorEngine(BaseAIEngine):
     """
-    Wan 2.1 & LTX-2 Video Synthesis Engine.
+    StudioCam CinemaMotion™ 60fps Video Synthesis.
     Animates static compositions into fluid cinematic 5-second video sequences.
     """
 
     @property
     def engine_name(self) -> str:
-        return "Wan 2.1 / LTX-2 Cinematic Video Animator"
+        return "StudioCam CinemaMotion™ / StudioCam CinemaMotion™ Cinematic Video Animator"
 
     @property
     def credit_cost(self) -> int:
@@ -60,6 +60,7 @@ class WanAnimatorEngine(BaseAIEngine):
 
         return {
             "success": True,
+            "message": f"5-second cinematic motion video synthesized ({request_data.motion_type}).",
             "job_id": file_id,
             "video_url": f"/api/v1/outputs/{file_id}.mp4",
             "poster_url": f"/api/v1/outputs/{preview_filename}",
@@ -68,7 +69,7 @@ class WanAnimatorEngine(BaseAIEngine):
             "camera_description": camera_desc,
             "duration_seconds": request_data.duration_seconds,
             "fps": request_data.fps,
-            "render_engine": "Wan 2.1 14B High-Quality Motion Pipeline",
+            "render_engine": "StudioCam 60fps High-Motion Pipeline",
             "status": "completed",
         }
 

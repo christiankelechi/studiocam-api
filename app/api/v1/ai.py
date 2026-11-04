@@ -30,7 +30,7 @@ router = APIRouter(prefix="/ai", tags=["AI Pipelines"])
 
 @router.post("/remove-background")
 def remove_background(payload: BgRemovalRequest, user: UserInDB = Depends(get_current_user)):
-    """BRIA RMBG-1.4 Subject Isolation & Transparent PNG cutout."""
+    """StudioCam Precision Alpha Isolation™ & Transparent PNG cutout."""
     try:
         engine = ai_factory.get_engine("rmbg")
         result = engine.run(payload, user)
@@ -55,7 +55,7 @@ def remove_background(payload: BgRemovalRequest, user: UserInDB = Depends(get_cu
 
 @router.post("/scene-swap")
 def scene_swap(payload: SceneSwapRequest, user: UserInDB = Depends(get_current_user)):
-    """Flux.1 Photorealistic Scene & Office Generator."""
+    """StudioCam UltraScene™ Photorealistic Scene & Office Generator."""
     try:
         engine = ai_factory.get_engine("flux_scene")
         result = engine.run(payload, user)
@@ -79,7 +79,7 @@ def scene_swap(payload: SceneSwapRequest, user: UserInDB = Depends(get_current_u
 
 @router.post("/relight")
 def relight_scene(payload: RelightRequest, user: UserInDB = Depends(get_current_user)):
-    """IC-Light Directional Studio Relighting."""
+    """StudioCam CinemaLight™ Studio Relighting."""
     try:
         engine = ai_factory.get_engine("iclight")
         result = engine.run(payload, user)
@@ -103,7 +103,7 @@ def relight_scene(payload: RelightRequest, user: UserInDB = Depends(get_current_
 
 @router.post("/animate-scene")
 def animate_scene(payload: VideoAnimateRequest, user: UserInDB = Depends(get_current_user)):
-    """Wan 2.1 / LTX-2 Cinematic Video Motion Synthesis."""
+    """StudioCam CinemaMotion™ / StudioCam CinemaMotion™ Cinematic Video Motion Synthesis."""
     try:
         engine = ai_factory.get_engine("wan_animator")
         result = engine.run(payload, user)
@@ -151,7 +151,7 @@ def upscale_image(payload: UpscaleRequest, user: UserInDB = Depends(get_current_
 
 @router.post("/face-restore")
 def restore_face(payload: FaceRestoreRequest, user: UserInDB = Depends(get_current_user)):
-    """GFPGAN / CodeFormer Facial Clarity Restoration."""
+    """StudioCam Face Clarity Engine™ / StudioCam Face Clarity Engine™ Facial Clarity Restoration."""
     return {
         "success": True,
         "job_id": f"face_{uuid.uuid4().hex[:8]}",

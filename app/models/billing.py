@@ -40,6 +40,8 @@ class CheckoutSessionResponse(BaseModel):
     checkout_url: str
     session_id: str
     reference: str
+    success: bool = True
+    message: str = "Checkout session created successfully."
 
 
 class CreditPurchaseRequest(BaseModel):

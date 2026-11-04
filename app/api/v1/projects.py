@@ -19,19 +19,25 @@ def list_projects(include_trashed: bool = False, user: UserInDB = Depends(get_cu
 @router.post("", response_model=Project, status_code=status.HTTP_201_CREATED)
 def create_project(payload: ProjectCreate, user: UserInDB = Depends(get_current_user)):
     """Create a new project canvas."""
-    return project_service.create_project(user.id, payload)
+    project = project_service.create_project(user.id, payload)
+    project.message = "Project created successfully."
+    return project
 
 
 @router.get("/{project_id}", response_model=Project)
 def get_project(project_id: str, user: UserInDB = Depends(get_current_user)):
     """Retrieve project details by ID."""
-    return project_service.get_project(project_id)
+    project = project_service.get_project(project_id)
+    project.message = "Project retrieved successfully."
+    return project
 
 
 @router.put("/{project_id}", response_model=Project)
 def update_project(project_id: str, payload: ProjectUpdate, user: UserInDB = Depends(get_current_user)):
     """Update project canvas layers, title, or properties."""
-    return project_service.update_project(project_id, payload)
+    project = project_service.update_project(project_id, payload)
+    project.message = "Project updated successfully."
+    return project
 
 
 @router.delete("/{project_id}")
@@ -47,7 +53,9 @@ def delete_project(project_id: str, permanent: bool = False, user: UserInDB = De
 @router.post("/{project_id}/duplicate", response_model=Project)
 def duplicate_project(project_id: str, user: UserInDB = Depends(get_current_user)):
     """Create an exact duplicate copy of a project."""
-    return project_service.duplicate_project(project_id, user.id)
+    project = project_service.duplicate_project(project_id, user.id)
+    project.message = "Project duplicated successfully."
+    return project
 
 
 @router.post("/{project_id}/export")

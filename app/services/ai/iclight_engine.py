@@ -1,4 +1,4 @@
-"""IC-Light Directional Ambient Relighting Service."""
+"""StudioCam CinemaLight™ Directional Ambient Relighting Service."""
 
 import math
 import os
@@ -16,13 +16,13 @@ from app.services.ai.base_engine import BaseAIEngine
 
 class ICLightEngine(BaseAIEngine):
     """
-    IC-Light Generative Studio Relighting Engine.
+    StudioCam CinemaLight™ Generative Studio Relighting Engine.
     Simulates directional studio key/rim lighting, color temperature shifts, and ambient exposure.
     """
 
     @property
     def engine_name(self) -> str:
-        return "IC-Light Generative Relighting Engine"
+        return "StudioCam CinemaLight™ Generative Relighting Engine"
 
     @property
     def credit_cost(self) -> int:
@@ -97,6 +97,7 @@ class ICLightEngine(BaseAIEngine):
 
         return {
             "success": True,
+            "message": f"Directional lighting applied at {request_data.light_angle}° ({temp}K).",
             "job_id": file_id,
             "output_url": f"/api/v1/outputs/{output_filename}",
             "output_base64": base64_result,
@@ -104,6 +105,6 @@ class ICLightEngine(BaseAIEngine):
             "light_intensity": request_data.light_intensity,
             "color_temperature": f"{temp}K",
             "ambient_exposure": request_data.ambient_exposure,
-            "render_quality": "IC-Light Directional Studio v2",
+            "render_quality": "StudioCam CinemaLight™ Studio v2",
         }
 

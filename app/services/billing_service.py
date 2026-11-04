@@ -68,7 +68,7 @@ class BillingService:
             features=[
                 "300 Generative Credits / month",
                 "Full HD 1080p Image Exports",
-                "BRIA RMBG-1.4 Subject Isolation",
+                "StudioCam Precision Alpha Isolation™",
                 "Basic Scene Presets",
             ],
             popular=False,
@@ -81,9 +81,9 @@ class BillingService:
             credits_monthly=1000,
             features=[
                 "1,000 Generative Credits / month",
-                "Flux.1 8K Photorealistic Scene Swap",
-                "IC-Light Directional Studio Relighting",
-                "Wan 2.1 5s Video Motion Animator",
+                "StudioCam UltraScene™ 8K Studio",
+                "StudioCam CinemaLight™ Studio Relighting",
+                "StudioCam CinemaMotion™ 5s Video Motion Animator",
                 "Priority GPU Queue (Zero Wait)",
                 "Full Commercial License",
             ],
@@ -163,6 +163,7 @@ class BillingService:
         new_balance = self.user_repo.add_credits(user.id, awarded_credits)
         return {
             "success": True,
+            "message": "Payment verified successfully and credits added to account.",
             "verified": True,
             "reference": reference,
             "credits_added": awarded_credits,

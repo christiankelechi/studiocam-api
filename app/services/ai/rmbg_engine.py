@@ -1,4 +1,4 @@
-"""BRIA RMBG-1.4 Subject Isolation & Background Removal Service."""
+"""StudioCam Precision Alpha Isolation™ & Background Removal Service."""
 
 import os
 import uuid
@@ -15,13 +15,13 @@ from app.services.ai.base_engine import BaseAIEngine
 
 class RMBGEngine(BaseAIEngine):
     """
-    BRIA RMBG-1.4 Subject Cutout Engine.
+    StudioCam Smart Cutout™ Subject Cutout Engine.
     Isolates foreground subjects and creates high-precision transparent alpha masks.
     """
 
     @property
     def engine_name(self) -> str:
-        return "BRIA RMBG-1.4 AI Subject Isolation"
+        return "StudioCam Smart Cutout™ AI Subject Isolation"
 
     @property
     def credit_cost(self) -> int:
@@ -75,6 +75,7 @@ class RMBGEngine(BaseAIEngine):
 
         response = {
             "success": True,
+            "message": "Subject isolated successfully with alpha matting and feathering.",
             "job_id": file_id,
             "output_url": f"/api/v1/outputs/{output_filename}",
             "output_base64": base64_result,

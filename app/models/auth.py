@@ -33,7 +33,11 @@ class RegisterRequest(BaseModel):
     """Registration payload."""
     email: str
     password: str
-    name: str
+    name: Optional[str] = None
+    full_name: Optional[str] = None
+
+    def get_display_name(self) -> str:
+        return self.name or self.full_name or self.email.split("@")[0]
 
 
 class ForgotPasswordRequest(BaseModel):
@@ -59,3 +63,5 @@ class AuthResponse(BaseModel):
     access_token: str
     token_type: str = "bearer"
     user: User
+    success: bool = True
+    message: str = "Authenticated successfully."

@@ -9,6 +9,15 @@ from pydantic import BaseModel, Field
 # Base directories
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
+# Automatically load environment variables from .env if present
+try:
+    from dotenv import load_dotenv
+    env_file = BASE_DIR / ".env"
+    if env_file.exists():
+        load_dotenv(env_file)
+except Exception:
+    pass
+
 # Safe writable storage directory for Vercel / AWS Lambda (never crash on read-only filesystem)
 try:
     if os.getenv("VERCEL") or os.getenv("VERCEL_ENV") or os.getenv("VERCEL_REGION") or os.getenv("AWS_LAMBDA_FUNCTION_NAME"):
@@ -44,13 +53,14 @@ class Settings(BaseModel):
         "http://127.0.0.1:3000",
         "http://localhost:5173",
         "http://127.0.0.1:5173",
-        "https://cyberswitchapp-services.duckdns.org",
+        "https://studiocam-api.vercel.app",
+        "https://studiocam.vercel.app",
         "*",
     ]
 
     # Security & JWT Auth
     SECRET_KEY: str = os.getenv(
-        "SECRET_KEY", "studiocam-super-secure-production-jwt-secret-key-2026-v2"
+        "SECRET_KEY", "7d85eaa5cfcd92e35b9cc2cdb6fe403de1153d04c14da43c82141214007e699b"
     )
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 7  # 7 days
@@ -60,10 +70,17 @@ class Settings(BaseModel):
     UPLOADS_PATH: str = str(UPLOADS_DIR)
     OUTPUTS_PATH: str = str(OUTPUTS_DIR)
 
-    # Cloud AI GPU & Model Pipelines
+    # Cloud AI GPU & Model Pipelines (Hybrid Fallback Architecture)
+    ENABLE_EXTERNAL_AI: bool = os.getenv("ENABLE_EXTERNAL_AI", "true").lower() == "true"
+    POLLINATIONS_ENABLED: bool = os.getenv("POLLINATIONS_ENABLED", "true").lower() == "true"
+    HF_TOKEN: str = os.getenv("HF_TOKEN", "")
     COMFYUI_URL: str = os.getenv("COMFYUI_URL", "http://localhost:8188")
     RUNPOD_GPU_URL: str = os.getenv("RUNPOD_GPU_URL", "")
-    MOCK_GPU_PROCESSING: bool = os.getenv("MOCK_GPU_PROCESSING", "true").lower() == "true"
+    RUNPOD_API_KEY: str = os.getenv("RUNPOD_API_KEY", "")
+    MOCK_GPU_PROCESSING: bool = os.getenv("MOCK_GPU_PROCESSING", "false").lower() == "true"
+
+    # FastAPI Public URL
+    FASTAPI_URL: str = os.getenv("FASTAPI_URL", "https://studiocam-api.vercel.app/")
 
     # Payment Gateways (Paystack & Stripe)
     PAYSTACK_SECRET_KEY: str = os.getenv("PAYSTACK_SECRET_KEY", "sk_test_paystack_studiocam_sample")

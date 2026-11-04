@@ -11,8 +11,8 @@ class UserRepository(ThreadSafeInMemoryRepository[UserInDB]):
 
     def __init__(self):
         super().__init__()
-        # Seed default test user matching frontend session
-        seed_user = UserInDB(
+        # Seed default test users matching frontend session & login page defaults
+        seed_user_christian = UserInDB(
             id="usr_christian_001",
             email="christian@studiocam.ai",
             name="Christian Eze",
@@ -23,7 +23,20 @@ class UserRepository(ThreadSafeInMemoryRepository[UserInDB]):
             hashed_password=hash_password("password123"),
             is_active=True,
         )
-        self.create(seed_user)
+        self.create(seed_user_christian)
+
+        seed_user_creator = UserInDB(
+            id="usr_creator_001",
+            email="creator@studiocam.ai",
+            name="StudioCam Creator",
+            role="creator",
+            credits=450,
+            plan="Pro Studio",
+            avatar="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=256&q=80",
+            hashed_password=hash_password("password123"),
+            is_active=True,
+        )
+        self.create(seed_user_creator)
 
     def get_by_email(self, email: str) -> Optional[UserInDB]:
         """Find user by email address."""
